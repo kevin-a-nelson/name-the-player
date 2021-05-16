@@ -1,4 +1,5 @@
 import BballReferenceTable from "./components/BballReferenceTable/BballRefrenceTable";
+import BaseballReferenceTable from "./components/BaseballReferenceTable/BaseballReferenceTable";
 import "./App.css";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
@@ -12,25 +13,48 @@ function App() {
   const [closestPlayer, setClosestPlayer] = useState("");
   const [reveal, setReveal] = useState(false);
   const [teamNames, setTeamNames] = useState([]);
+  const [selectedTeam, setSelectedTeam] = useState("ATL");
   const [leagues, setLeagues] = useState([]);
+  const [selectedLeague, setSelectedLeague] = useState("NBA");
 
-  const fetchTeamRoster = (team) => {
+  const fetchLeagues = () => {
     axios
       .get(
-        `https://raw.githubusercontent.com/kevin-a-nelson/bball-reference-json/main/NBA/${team}.json`
+        `https://raw.githubusercontent.com/kevin-a-nelson/bball-reference-json/main/leagues.json`
       )
       .then((response) => response.data)
       .then((data) => {
-        data.sort(function (a, b) {
-          return b.pts_per_g - a.pts_per_g;
-        });
+        setLeagues(data);
+      });
+  };
+
+  const fetchTeamRoster = (league, team) => {
+    axios
+      .get(
+        `https://raw.githubusercontent.com/kevin-a-nelson/bball-reference-json/main/${league}/${team}.json`
+      )
+      .then((response) => response.data)
+      .then((data) => {
+        if (league === "NBA") {
+          data.sort(function (a, b) {
+            return b.pts_per_g - a.pts_per_g;
+          });
+        }
+        if (league === "MLB") {
+          data.sort(function (a, b) {
+            return b.PA - a.PA;
+          });
+          data = data.filter(function (player) {
+            return player.pos_summary != "1" && player.pos_summary != "/1";
+          });
+        }
         console.log(data);
         setPlayers(data);
       });
   };
 
-  const fetchTeamNames = (league) => {
-    axios
+  const fetchTeamNames = async (league) => {
+    return axios
       .get(
         `https://raw.githubusercontent.com/kevin-a-nelson/bball-reference-json/main/${league}/teamNames.json`
       )
@@ -42,8 +66,9 @@ function App() {
   };
 
   useEffect(() => {
-    fetchTeamNames("NBA");
-    fetchTeamRoster("ATL");
+    fetchLeagues();
+    fetchTeamNames(selectedLeague);
+    fetchTeamRoster(selectedLeague, selectedTeam);
   }, []);
 
   const handleChange = (e) => {
@@ -72,7 +97,7 @@ function App() {
         newClosestPlayer = newPlayers[i].player;
       }
 
-      if (inputPlayerName === playerName) {
+      if (weight == 100) {
         newPlayers[i].show = true;
         setPlayers(newPlayers);
         setPlayerInput("");
@@ -86,11 +111,28 @@ function App() {
 
   const handleTeamChange = (e) => {
     const newTeam = e.target.value;
-    console.log(newTeam);
+    setMatchPer(0);
+    setSelectedTeam(newTeam);
+    setClosestPlayer("");
+    setPlayerInput("");
+    fetchTeamRoster(selectedLeague, newTeam);
+  };
+
+  const handleLeagueChange = async (e) => {
+    const newLeague = e.target.value;
     setMatchPer(0);
     setClosestPlayer("");
     setPlayerInput("");
-    fetchTeamRoster(newTeam);
+    setSelectedLeague(newLeague);
+    fetchTeamNames(newLeague);
+
+    if (newLeague === "MLB") {
+      setSelectedTeam("ARI");
+      fetchTeamRoster(newLeague, "ARI");
+    } else if (newLeague === "NBA") {
+      setSelectedTeam("ATL");
+      fetchTeamRoster(newLeague, "ATL");
+    }
   };
 
   const resetPlayers = () => {
@@ -111,7 +153,27 @@ function App() {
     <div className="App">
       <h3 className="center">Name the Players</h3>
       <div className="mb-20"></div>
-      <select className="select-team" onChange={handleTeamChange}>
+      <select
+        className="select-league"
+        onChange={handleLeagueChange}
+        value={selectedLeague}
+      >
+        {leagues
+          ? leagues.map((value, index) => {
+              return (
+                <option key={index} value={value}>
+                  {value}
+                </option>
+              );
+            })
+          : null}
+      </select>
+      <div className="mb-20"></div>
+      <select
+        className="select-team"
+        onChange={handleTeamChange}
+        value={selectedTeam}
+      >
         {teamNames
           ? teamNames.map((value, index) => {
               return (
@@ -140,7 +202,15 @@ function App() {
         {reveal && matchPer != 0 ? closestPlayer : "See Closest Match"}
       </div>
       <div className="mb-20"></div>
-      <BballReferenceTable playerInput={playerInput} players={players} />
+
+      {selectedLeague === "MLB" ? (
+        <BaseballReferenceTable playerInput={playerInput} players={players} />
+      ) : null}
+
+      {selectedLeague === "NBA" ? (
+        <BballReferenceTable playerInput={playerInput} players={players} />
+      ) : null}
+
       <div className="mb-20"></div>
       <div class="flex">
         <button onClick={resetPlayers} className="reset-btn">
