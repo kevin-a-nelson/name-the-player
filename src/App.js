@@ -11,11 +11,12 @@ function App() {
   const [matchPer, setMatchPer] = useState(0);
   const [closestPlayer, setClosestPlayer] = useState("");
   const [reveal, setReveal] = useState(false);
+  const [teamNames, setTeamNames] = useState([]);
 
   const fetchTeamRoster = (team) => {
     axios
       .get(
-        `https://raw.githubusercontent.com/kevin-a-nelson/bball-reference-json/main/${team}.json`
+        `https://raw.githubusercontent.com/kevin-a-nelson/bball-reference-json/main/NBA/${team}.json`
       )
       .then((response) => response.data)
       .then((data) => {
@@ -27,7 +28,19 @@ function App() {
       });
   };
 
+  const fetchTeamNames = (league) => {
+    axios
+      .get(
+        `https://raw.githubusercontent.com/kevin-a-nelson/bball-reference-json/main/${league}/teamNames.json`
+      )
+      .then((response) => response.data)
+      .then((data) => {
+        setTeamNames(data);
+      });
+  };
+
   useEffect(() => {
+    fetchTeamNames("NBA");
     fetchTeamRoster("ATL");
   }, []);
 
@@ -97,8 +110,8 @@ function App() {
       <h3 className="center">Name the Players</h3>
       <div className="mb-20"></div>
       <select className="select-team" onChange={handleTeamChange}>
-        {NBATeamAbbrev
-          ? NBATeamAbbrev.map((value, index) => {
+        {teamNames
+          ? teamNames.map((value, index) => {
               return (
                 <option key={index} value={value}>
                   {value}
