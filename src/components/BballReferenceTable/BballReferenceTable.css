@@ -24,3 +24,7 @@ td {
   border-right: 2px solid black;
   width: 200px;
 }
+
+.name-row {
+  color: teal;
+}

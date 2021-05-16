@@ -37,7 +37,7 @@ const BballReferenceTable = ({ playerInput, players }) => {
           return (
             <tr key={index}>
               <td>{index}</td>
-              <td className="name-col">
+              <td className="name-col name-row">
                 {value.show || playerInput === value.player
                   ? value.player
                   : null}
