@@ -1,0 +1,29 @@
+.stats_table {
+  border-collapse: collapse;
+  border: 1px solid;
+  width: 100%;
+  font-size: 11px;
+}
+
+th {
+  border-bottom: 1px solid;
+  border-left: 1px dotted black;
+  border-right: 1px dotted black;
+}
+
+td {
+  border: 1px dotted black;
+  width: 40px;
+  /* padding: 10px; */
+  text-align: center;
+  padding: 5px 0;
+}
+
+.name-col {
+  border-left: 2px solid black;
+  border-right: 2px solid black;
+  width: 100px;
+}
+
+.input-bar {
+}
