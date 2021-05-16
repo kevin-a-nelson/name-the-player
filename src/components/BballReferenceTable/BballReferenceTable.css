@@ -22,8 +22,5 @@ td {
 .name-col {
   border-left: 2px solid black;
   border-right: 2px solid black;
-  width: 100px;
-}
-
-.input-bar {
+  width: 200px;
 }
