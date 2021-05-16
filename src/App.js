@@ -94,8 +94,9 @@ function App() {
 
   return (
     <div className="App">
+      <h3 className="center">Name the Players</h3>
       <div className="mb-20"></div>
-      <select onChange={handleTeamChange}>
+      <select className="select-team" onChange={handleTeamChange}>
         {NBATeamAbbrev
           ? NBATeamAbbrev.map((value, index) => {
               return (
