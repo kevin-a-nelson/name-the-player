@@ -1,7 +1,7 @@
 const NBATeamAbbrev = [
   "ATL",
   "BOS",
-  "CHA",
+  "CHO",
   "CHI",
   "CLE",
   "DAL",
@@ -16,7 +16,7 @@ const NBATeamAbbrev = [
   "MIA",
   "MIL",
   "MIN",
-  "NOH",
+  "NOP",
   "NYK",
   "BRK",
   "OKC",
@@ -26,7 +26,7 @@ const NBATeamAbbrev = [
   "POR",
   "SAC",
   "TOR",
-  "UTH",
+  "UTA",
   "WAS",
 ];
 
