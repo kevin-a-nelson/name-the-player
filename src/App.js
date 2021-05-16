@@ -43,7 +43,7 @@ function App() {
 
   useEffect(() => {
     fetchTeamNames("NBA");
-    fetchTeamRoster(teamNames[0]);
+    fetchTeamRoster("ATL");
   }, []);
 
   const handleChange = (e) => {
