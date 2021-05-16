@@ -12,6 +12,7 @@ function App() {
   const [closestPlayer, setClosestPlayer] = useState("");
   const [reveal, setReveal] = useState(false);
   const [teamNames, setTeamNames] = useState([]);
+  const [leagues, setLeagues] = useState([]);
 
   const fetchTeamRoster = (team) => {
     axios
@@ -35,13 +36,14 @@ function App() {
       )
       .then((response) => response.data)
       .then((data) => {
+        data.sort();
         setTeamNames(data);
       });
   };
 
   useEffect(() => {
     fetchTeamNames("NBA");
-    fetchTeamRoster("ATL");
+    fetchTeamRoster(teamNames[0]);
   }, []);
 
   const handleChange = (e) => {
