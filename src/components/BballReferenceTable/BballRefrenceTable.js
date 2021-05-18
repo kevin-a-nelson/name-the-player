@@ -17,6 +17,7 @@ const BballReferenceTable = ({ playerInput, players }) => {
           <th>FG%</th>
           <th>3P</th>
           <th>3PA</th>
+          <th>3P%</th>
           <th>2P</th>
           <th>2PA</th>
           <th>2P%</th>
@@ -52,6 +53,7 @@ const BballReferenceTable = ({ playerInput, players }) => {
               <td>{value.fg_pct}</td>
               <td>{value.fg3_per_g}</td>
               <td>{value.fg3a_per_g}</td>
+              <td>{value.fg3_pct}</td>
               <td>{value.fg2_per_g}</td>
               <td>{value.fg2a_per_g}</td>
               <td>{value.fg2_pct}</td>
